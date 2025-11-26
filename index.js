@@ -27,42 +27,44 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
+
     const db = client.db('nextDB')
-    const product = db.collection('products')
+    const productsCollection = db.collection('products')
 
 
 
 
  app.get('/products', async (req,res)=>{
-    const result = await product.find().toArray()
+    const result = await productsCollection.find().toArray()
     res.send(result)
+    console.log(req.body);
+})
+ app.get('/products/:id', async (req,res)=>{
+   const id = req.params.id
+   const query = {_id: new ObjectId(id)}
+   const result = await productsCollection.findOne(query)
+   res.send(result)
+
 })
 
   app.post('/products',async(req,res)=>{
   const data = (req.body)
-  const result =await product.insertOne(data)
+  const result =await productsCollection.insertOne(data)
   res.send(result)
  })
 
  app.get('/manageProduct', async(req,res)=>{
     const email = req.query.email
-    const result= await product.find({email: email}).toArray()
+    const result= await productsCollection.find({email: email}).toArray()
     res.send(result)
   })
 
 app.delete('/manageProduct/:id', async(req,res)=>{
    const id = req.params.id
    const query = {_id: new ObjectId(id)}
-   const result = await product.deleteOne(query)
+   const result = await productsCollection.deleteOne(query)
    res.send(result)
 })
-app.get("/manageProduct/:id", async (req, res) => {
-   const id = req.params.id
-   const query = {_id: new ObjectId(id)}
-   const result = await product.findOne(query)
-   res.send(result)
-})
-
 
 
     await client.db("admin").command({ ping: 1 });
