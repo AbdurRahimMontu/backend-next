@@ -26,7 +26,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
     const db = client.db('nextDB')
     const productsCollection = db.collection('products')
@@ -67,7 +67,7 @@ app.delete('/manageProduct/:id', async(req,res)=>{
 })
 
 
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("You successfully connected to MongoDB!");
   } finally {
 
